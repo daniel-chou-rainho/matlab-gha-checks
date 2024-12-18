@@ -1,5 +1,7 @@
 name: MATLAB Test
-on: [push]
+on: 
+  push:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -13,4 +15,4 @@ jobs:
       - name: Run script
         uses: matlab-actions/run-command@v1
         with:
-          command: addpath(pwd); your_script_name
+          command: addpath(pwd); main
