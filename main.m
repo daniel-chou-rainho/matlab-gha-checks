@@ -8,6 +8,9 @@ c.Label.String = 'Temperature (K)';
 c.Label.FontName = 'Arial';
 c.Label.FontSize = 12;
 
+disp('Screen DPI:')
+disp(get(0,'ScreenPixelsPerInch'))
+
 disp('Axes Position:')
 disp(get(gca,'Position'))
 disp('Colorbar Position:')
