@@ -1,5 +1,5 @@
-figure('Units', 'pixels', 'Position', [100 100 560 420], 'Renderer', 'painters');
-ax = axes('Units', 'normalized');
+figure('Units', 'pixels', 'Position', [100 100 560 420]);
+ax = axes('Units', 'pixels');
 x = rand(10);
 surf(x)
 c = colorbar;
