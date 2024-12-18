@@ -10,9 +10,9 @@ jobs:
       
       - name: Set up virtual display
         run: |
-          sudo apt-get install -y xvfb
-          Xvfb :99 &
-          echo "DISPLAY=:99" >> $GITHUB_ENV
+            sudo apt-get install -y xvfb
+            Xvfb :99 -dpi 96 &
+            echo "DISPLAY=:99" >> $GITHUB_ENV
       
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v2
