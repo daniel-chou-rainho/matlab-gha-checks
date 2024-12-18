@@ -16,7 +16,7 @@ jobs:
      
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v2
-        
+
       - name: Run script
         uses: matlab-actions/run-command@v1
         with:
@@ -26,4 +26,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: figure
-          path: output.png
+          path: output.svg
