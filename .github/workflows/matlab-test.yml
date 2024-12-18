@@ -4,24 +4,18 @@ on:
   workflow_dispatch:
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-     
-      - name: Set up virtual display
-        run: |
-          sudo apt-get install -y xvfb
-          Xvfb :99 &
-          echo "DISPLAY=:99" >> $GITHUB_ENV
-     
+      
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v2
-
+        
       - name: Run script
         uses: matlab-actions/run-command@v1
         with:
           command: addpath(pwd); main
-
+          
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
