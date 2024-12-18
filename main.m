@@ -1,10 +1,6 @@
 figure('Units', 'pixels', 'Position', [100 100 560 420]);
-ax = axes('Units', 'pixels');
-x = rand(10);
-surf(x)
-c = colorbar;
-disp('Screen DPI:')
-disp(get(0,'ScreenPixelsPerInch'))
+axes('Units', 'normalized');
+colorbar;
 disp('Axes Position:')
 disp(get(gca,'Position'))
 disp('Colorbar Position:')
