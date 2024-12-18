@@ -1,4 +1,4 @@
-fig = figure('Units', 'pixels', 'Position', [100 100 560 420]);
+fig = figure('Units', 'pixels', 'Position', [100 100 560 420], 'Renderer', 'painters');
 axes('Units', 'normalized');
 c = colorbar;
 
@@ -6,7 +6,7 @@ set(fig, 'PaperUnits', 'inches');
 set(fig, 'PaperPosition', [0 0 560/96 420/96]);
 set(fig, 'PaperSize', [560/96 420/96]);
 
-print(fig, 'output', '-dpng', '-r96');
+print(fig, 'output', '-dsvg');
 
 disp('MATLAB Version:')
 disp(version)
