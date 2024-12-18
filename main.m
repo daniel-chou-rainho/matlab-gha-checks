@@ -1,4 +1,4 @@
-figure('Units', 'pixels', 'Position', [100 100 560 420]);
+figure('Units', 'pixels', 'Position', [100 100 560 420], 'Renderer', 'painters');
 ax = axes('Units', 'normalized');
 x = rand(10);
 surf(x)
