@@ -8,6 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Install xrandr
+        run: sudo apt-get install -y x11-xserver-utils
+        
       - name: Set DPI
         run: xrandr --dpi 96
       
