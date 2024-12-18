@@ -5,10 +5,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      QT_FONT_DPI: 96
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Set DPI
+        run: xrandr --dpi 96
       
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v2
