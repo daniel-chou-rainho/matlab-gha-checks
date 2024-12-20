@@ -276,3 +276,49 @@ Monitor Positions:
            PickableParts: 'visible'
                   Layout: [0×0 matlab.ui.layout.LayoutOptions]
 
+=== COLORBAR LABEL PROPERTIES ===
+                  Color: [0.1500 0.1500 0.1500]
+              ColorMode: 'auto'
+               Position: [2.2413 0.5000 0]
+                 String: ''
+            Interpreter: 'tex'
+                 Extent: [2.2413 0.5000 0 0]
+               Rotation: 90
+               FontName: 'Helvetica'
+              FontUnits: 'points'
+               FontSize: 9
+              FontAngle: 'normal'
+             FontWeight: 'normal'
+    HorizontalAlignment: 'center'
+      VerticalAlignment: 'top'
+              EdgeColor: 'none'
+              LineStyle: '-'
+              LineWidth: 0.5000
+        BackgroundColor: 'none'
+                 Margin: 3
+                Editing: off
+               Clipping: off
+          FontSmoothing: on
+           Interactions: []
+                  Units: 'data'
+               Children: [0×0 GraphicsPlaceholder]
+                 Parent: [1×1 ColorBar]
+                Visible: on
+       HandleVisibility: 'on'
+          ButtonDownFcn: ''
+            ContextMenu: [0×0 GraphicsPlaceholder]
+             BusyAction: 'queue'
+           BeingDeleted: off
+          Interruptible: on
+              CreateFcn: ''
+              DeleteFcn: ''
+                   Type: 'text'
+                    Tag: ''
+               UserData: []
+               Selected: off
+     SelectionHighlight: on
+                HitTest: on
+          PickableParts: 'visible'
+       AffectAutoLimits: off
+            SeriesIndex: 'none'
+

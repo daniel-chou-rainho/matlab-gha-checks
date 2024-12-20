@@ -2,6 +2,7 @@
 fig = figure('Units', 'pixels', 'Position', [100 100 560 420], 'Renderer', 'painters');
 axes('Units', 'normalized');
 c = colorbar;
+c.Label.Units = 'normalized';
 
 % Clear file by opening in write mode
 fid = fopen('figure_properties.txt', 'w');
