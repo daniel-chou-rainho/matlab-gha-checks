@@ -26,4 +26,7 @@ disp(get(gca));
 disp('=== COLORBAR PROPERTIES ===');
 disp(get(c));
 
+disp('=== COLORBAR LABEL PROPERTIES ===');
+disp(get(c.Label));
+
 diary off;
