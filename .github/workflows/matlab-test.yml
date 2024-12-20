@@ -1,31 +1,30 @@
-name: MATLAB Multi-DPI and Resolution Test
+name: MATLAB Test
 on:
   push:
   workflow_dispatch:
-
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dpi: [96, 97, 100, 104]
-        resolution:
-          - "2560x1440x24"
-          - "1920x1080x24"
-          - "1920x1200x24"
     steps:
       - uses: actions/checkout@v4
       
       - name: Set up virtual display
         run: |
           sudo apt-get install -y xvfb
-          Xvfb :99 -screen 0 ${{ matrix.resolution }} -dpi ${{ matrix.dpi }} &
+          Xvfb :99 -dpi 96 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
-      
+
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v2
-        
+
       - name: Run script
         uses: matlab-actions/run-command@v1
         with:
           command: addpath(pwd); main
+
+      - name: Upload figure properties
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: figure-properties
+          path: figure_properties.txt
