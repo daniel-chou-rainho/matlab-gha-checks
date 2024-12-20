@@ -1,12 +1,22 @@
-name: MATLAB Test
+name: MATLAB Multi-DPI Test
 on:
   push:
   workflow_dispatch:
+
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dpi: [94, 95, 96, 97, 98, 99, 100]
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Set up virtual display
+        run: |
+          sudo apt-get install -y xvfb
+          Xvfb :99 -dpi ${{ matrix.dpi }} &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
       
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v2
@@ -15,9 +25,3 @@ jobs:
         uses: matlab-actions/run-command@v1
         with:
           command: addpath(pwd); main
-          
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: figure
-          path: output.svg
