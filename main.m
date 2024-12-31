@@ -12,7 +12,7 @@ end
 
 % Load baseline and compare
 baseline = load(baselinePath);
-differences = compareFigures(baseline.info, info);
+differences = compareFigures(baseline.info, info, false);
 
 % Save differences
 saveDifferences(differences);
@@ -82,7 +82,7 @@ for i = 1:length(propNames)
 end
 end
 
-function differences = compareFigures(info1, info2)
+function differences = compareFigures(info1, info2, debug)
 differences = struct('index', {}, 'field', {}, 'baseline', {}, 'current', {}, 'matches', {});
 
 % Check counts first
@@ -109,11 +109,11 @@ end
 
 % Finally do property comparisons
 for i = 1:length(info1)
-    differences = compareProperties(differences, info1(i), info2(i), i);
+    differences = compareProperties(differences, info1(i), info2(i), i, debug);
 end
 end
 
-function differences = compareProperties(differences, obj1, obj2, index)
+function differences = compareProperties(differences, obj1, obj2, index, debug)
 props1 = obj1.properties;
 props2 = obj2.properties;
 fields = intersect(fieldnames(props1), fieldnames(props2));
@@ -133,12 +133,14 @@ for i = 1:length(fields)
         matches = isequal(val1, val2);
     end
     
-    nextIdx = length(differences) + 1;
-    differences(nextIdx).index = index;
-    differences(nextIdx).field = field;
-    differences(nextIdx).baseline = val1;
-    differences(nextIdx).current = val2;
-    differences(nextIdx).matches = matches;
+    if debug || ~matches
+        nextIdx = length(differences) + 1;
+        differences(nextIdx).index = index;
+        differences(nextIdx).field = field;
+        differences(nextIdx).baseline = val1;
+        differences(nextIdx).current = val2;
+        differences(nextIdx).matches = matches;
+    end
 end
 end
 
