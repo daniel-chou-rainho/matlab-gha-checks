@@ -19,7 +19,10 @@ saveDifferences(differences);
 end
 
 function fig = createFigure()
-fig = figure('Units', 'pixels', 'Position', [100 100 560 420], 'Renderer', 'painters');
+fig = figure('Units', 'pixels', ...
+    'Position', [100 100 560 420], ...
+    'Renderer', 'painters', ...
+    'Visible', 'off');  % Add this line to prevent window from showing
 axes('Units', 'normalized');
 c = colorbar;
 c.Label.Units = 'normalized';
@@ -120,7 +123,11 @@ for i = 1:length(fields)
     val1 = props1.(field);
     val2 = props2.(field);
     
-    if isnumeric(val1) && isnumeric(val2)
+    if isa(val1, 'matlab.lang.OnOffSwitchState') && isa(val2, 'matlab.lang.OnOffSwitchState')
+        val1 = strcmp(string(val1), 'on');
+        val2 = strcmp(string(val2), 'on');
+        matches = val1 == val2;
+    elseif isnumeric(val1) && isnumeric(val2)
         matches = all(abs(val1(:) - val2(:)) < 1e-10);
     else
         matches = isequal(val1, val2);

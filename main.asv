@@ -80,7 +80,7 @@ function props = captureProperties(obj)
 end
 
 function differences = compareFigures(info1, info2)
-    differences = struct('index', {}, 'field', {}, 'baseline', {}, 'current', {}, 'matches', {});
+    differences = {};
     
     % Check counts first
     if length(info1) ~= length(info2)
@@ -90,53 +90,53 @@ function differences = compareFigures(info1, info2)
         differences(1).current = length(info2);
         differences(1).matches = false;
         return;
+end
+
+% Then check classes
+for i = 1:length(info1)
+    if ~strcmp(info1(i).class, info2(i).class)
+        differences(1).index = i;
+        differences(1).field = 'class_mismatch';
+        differences(1).baseline = info1(i).class;
+        differences(1).current = info2(i).class;
+        differences(1).matches = false;
+        return;
     end
-    
-    % Then check classes
-    for i = 1:length(info1)
-        if ~strcmp(info1(i).class, info2(i).class)
-            differences(1).index = i;
-            differences(1).field = 'class_mismatch';
-            differences(1).baseline = info1(i).class;
-            differences(1).current = info2(i).class;
-            differences(1).matches = false;
-            return;
-        end
-    end
-    
-    % Finally do property comparisons
-    for i = 1:length(info1)
-        differences = compareProperties(differences, info1(i), info2(i), i);
-    end
+end
+
+% Finally do property comparisons
+for i = 1:length(info1)
+    differences = compareProperties(differences, info1(i), info2(i), i);
+end
 end
 
 function differences = compareProperties(differences, obj1, obj2, index)
-    props1 = obj1.properties;
-    props2 = obj2.properties;
-    fields = intersect(fieldnames(props1), fieldnames(props2));
+props1 = obj1.properties;
+props2 = obj2.properties;
+fields = intersect(fieldnames(props1), fieldnames(props2));
+
+for i = 1:length(fields)
+    field = fields{i};
+    val1 = props1.(field);
+    val2 = props2.(field);
     
-    for i = 1:length(fields)
-        field = fields{i};
-        val1 = props1.(field);
-        val2 = props2.(field);
-        
-        if isnumeric(val1) && isnumeric(val2)
-            matches = all(abs(val1(:) - val2(:)) < 1e-10);
-        else
-            matches = isequal(val1, val2);
-        end
-        
-        nextIdx = length(differences) + 1;
-        differences(nextIdx).index = index;
-        differences(nextIdx).field = field;
-        differences(nextIdx).baseline = val1;
-        differences(nextIdx).current = val2;
-        differences(nextIdx).matches = matches;
+    if isnumeric(val1) && isnumeric(val2)
+        matches = all(abs(val1(:) - val2(:)) < 1e-10);
+    else
+        matches = isequal(val1, val2);
     end
+    
+    nextIdx = length(differences) + 1;
+    differences(nextIdx).index = index;
+    differences(nextIdx).field = field;
+    differences(nextIdx).baseline = val1;
+    differences(nextIdx).current = val2;
+    differences(nextIdx).matches = matches;
+end
 end
 
 function saveDifferences(differences)
-    if ~isempty(differences)
-        save('figure_properties.mat', 'differences');
-    end
+if ~isempty(differences)
+    save('figure_properties.mat', 'differences');
+end
 end
