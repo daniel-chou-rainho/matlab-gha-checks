@@ -83,11 +83,12 @@ end
 end
 
 function differences = compareFigures(info1, info2, debug)
-differences = struct('index', {}, 'field', {}, 'baseline', {}, 'current', {}, 'matches', {});
+differences = struct('class', {}, 'parent', {}, 'field', {}, 'baseline', {}, 'current', {}, 'matches', {});
 
 % Check counts first
 if length(info1) ~= length(info2)
-    differences(1).index = 0;
+    differences(1).class = 'root';
+    differences(1).parent = '';
     differences(1).field = 'object_count';
     differences(1).baseline = length(info1);
     differences(1).current = length(info2);
@@ -98,7 +99,8 @@ end
 % Then check classes
 for i = 1:length(info1)
     if ~strcmp(info1(i).class, info2(i).class)
-        differences(1).index = i;
+        differences(1).class = info1(i).class;
+        differences(1).parent = '';
         differences(1).field = 'class_mismatch';
         differences(1).baseline = info1(i).class;
         differences(1).current = info2(i).class;
@@ -109,11 +111,11 @@ end
 
 % Finally do property comparisons
 for i = 1:length(info1)
-    differences = compareProperties(differences, info1(i), info2(i), i, debug);
+    differences = compareProperties(differences, info1(i), info2(i), info1(i).parent, debug);
 end
 end
 
-function differences = compareProperties(differences, obj1, obj2, index, debug)
+function differences = compareProperties(differences, obj1, obj2, parent, debug)
 props1 = obj1.properties;
 props2 = obj2.properties;
 fields = intersect(fieldnames(props1), fieldnames(props2));
@@ -135,7 +137,8 @@ for i = 1:length(fields)
     
     if debug || ~matches
         nextIdx = length(differences) + 1;
-        differences(nextIdx).index = index;
+        differences(nextIdx).class = obj1.class;
+        differences(nextIdx).parent = parent;
         differences(nextIdx).field = field;
         differences(nextIdx).baseline = val1;
         differences(nextIdx).current = val2;
