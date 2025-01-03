@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>figure2 - Comparison</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 40px; }
-.image-container { display: flex; justify-content: space-between; margin: 20px 0; }
-.image-box { width: 48%; }
-.image-box img { width: 100%; }
-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-th { background-color: #f5f5f5; }
-.fail { background-color: #ffe6e6; }
-.back-link { margin-bottom: 20px; }
+* { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8f9fa; }
+.container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+h1, h2 { color: #2c3e50; margin-top: 0; }
+.back-link { margin-bottom: 1.5rem; }
+.back-link a { color: #364fc7; text-decoration: none; }
+.back-link a:hover { color: #5c7cfa; }
+.image-container { display: flex; gap: 2rem; margin: 2rem 0; }
+.image-box { flex: 1; }
+.image-box img { width: 100%; border-radius: 4px; border: 1px solid #e9ecef; }
+table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
+th { background: #f1f3f5; padding: 0.75rem; text-align: left; }
+td { padding: 0.75rem; border-bottom: 1px solid #e9ecef; }
+tr.fail { background: #ffe3e3; }
 </style>
 </head>
 <body>
+<div class="container">
 <div class="back-link"><a href="index.html">← Back to Index</a></div>
 <h1>figure2 Comparison</h1>
 <div class="image-container">
-  <div class="image-box">
-    <h2>Baseline Image</h2>
-    <img src="baseline_figure2.png" alt="Baseline">
-  </div>
-  <div class="image-box">
-    <h2>Test Image</h2>
-    <img src="test_figure2.png" alt="Test">
-  </div>
+<div class="image-box">
+<h2>Baseline Image</h2>
+<img src="baseline_figure2.png" alt="Baseline">
+</div>
+<div class="image-box">
+<h2>Test Image</h2>
+<img src="test_figure2.png" alt="Test">
+</div>
 </div>
 <h2>Differences</h2>
 <table>
 <tr><th>Class</th><th>Parent</th><th>Field</th><th>Baseline</th><th>Test</th></tr>
 </table>
+</div>
 </body>
 </html>
