@@ -111,7 +111,7 @@ end
 end
 
 function differences = compareFigures(info1, info2, debug)
-differences = struct('class', {}, 'parent', {}, 'field', {}, 'baseline', {}, 'current', {}, 'matches', {});
+differences = struct('class', {}, 'parent', {}, 'field', {}, 'baseline', {}, 'test', {}, 'matches', {});
 
 % Check counts first
 if length(info1) ~= length(info2)
@@ -119,7 +119,7 @@ if length(info1) ~= length(info2)
     differences(1).parent = '';
     differences(1).field = 'object_count';
     differences(1).baseline = length(info1);
-    differences(1).current = length(info2);
+    differences(1).test = length(info2);
     differences(1).matches = false;
     return;
 end
@@ -131,7 +131,7 @@ for i = 1:length(info1)
         differences(1).parent = '';
         differences(1).field = 'class_mismatch';
         differences(1).baseline = info1(i).class;
-        differences(1).current = info2(i).class;
+        differences(1).test = info2(i).class;
         differences(1).matches = false;
         return;
     end
@@ -178,7 +178,7 @@ for i = 1:length(fields)
         differences(nextIdx).parent = parent;
         differences(nextIdx).field = field;
         differences(nextIdx).baseline = val1;
-        differences(nextIdx).current = val2;
+        differences(nextIdx).test = val2;
         differences(nextIdx).matches = matches;
     end
 end
