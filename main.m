@@ -157,9 +157,7 @@ end
 end
 
 function saveDifferences(differences)
-if ~isempty(differences)
     save('figure_properties.mat', 'differences');
-end
 end
 
 function blacklist = getBlacklist()
@@ -167,6 +165,9 @@ blacklist = containers.Map();
 
 % Object-specific properties
 blacklist('matlab.ui.Figure:Number') = [];
+blacklist('matlab.ui.Root:PointerLocation') = [];
+blacklist('matlab.ui.container.ContextMenu:ContextMenuOpeningFcn') = [];
+blacklist('matlab.graphics.axis.Axes:InteractionOptions') = [];
 
 % Global properties to ignore for all objects
 blacklist('*:Children') = [];
