@@ -124,8 +124,8 @@ fields = intersect(fieldnames(props1), fieldnames(props2));
 for i = 1:length(fields)
     field = fields{i};
     
-    key = [obj1.class ':' field];
-    if blacklist.isKey(key) || blacklist.isKey(['*:' field])
+    % Skip if in blacklist
+    if isfield(blacklist, obj1.class) && isfield(blacklist.(obj1.class), field)
         continue;
     end
     
@@ -160,14 +160,6 @@ function saveDifferences(differences)
 if ~isempty(differences)
     save('figure_properties.mat', 'differences');
 end
-end
 
-function blacklist = getBlacklist()
-blacklist = containers.Map();
 
-% Object-specific properties
-blacklist('matlab.ui.Figure:Number') = [];
-
-% Global properties to ignore for all objects
-blacklist('*:Children') = [];
 end
