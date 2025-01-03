@@ -1,31 +1,59 @@
 function main()
-% Create and capture figure info
-fig = createFigure();
-info = captureInfo(fig);
+% Create and capture multiple figures
+figs = {
+    createFigure1(),
+    createFigure2(),
+    createFigure3()
+    };
 
-% Load or create baseline
-baselinePath = 'baseline_figure.mat';
-if ~isfile(baselinePath)
-    save(baselinePath, 'info');
+infos = cellfun(@captureInfo, figs, 'UniformOutput', false);
+
+% Handle baselines
+baselinePaths = {
+    'baseline_figure1.mat',
+    'baseline_figure2.mat',
+    'baseline_figure3.mat'
+    };
+
+% Save baselines if they don't exist
+for i = 1:length(baselinePaths)
+    if ~isfile(baselinePaths{i})
+        info = infos{i};
+        save(baselinePaths{i}, 'info');
+    end
+end
+
+if all(~isfile(baselinePaths))
     return;
 end
 
-% Load baseline and compare
-baseline = load(baselinePath);
-differences = compareFigures(baseline.info, info, false);
-
-% Save differences
-saveDifferences(differences);
+% Compare figures
+allDifferences = struct();
+for i = 1:length(baselinePaths)
+    baseline = load(baselinePaths{i});
+    allDifferences.(sprintf('figure%d', i)) = compareFigures(baseline.info, infos{i}, false);
 end
 
-function fig = createFigure()
-fig = figure('Units', 'pixels', ...
-    'Position', [100 100 560 420], ...
-    'Renderer', 'painters', ...
-    'Visible', 'off');  % Add this line to prevent window from showing
+% Save all differences
+save('all_figure_differences.mat', 'allDifferences');
+end
+
+% Example figure creation functions
+function fig = createFigure1()
+fig = figure('Visible', 'off');
 axes('Units', 'normalized');
 c = colorbar;
 c.Label.Units = 'normalized';
+end
+
+function fig = createFigure2()
+fig = figure('Visible', 'off');
+plot(1:10);
+end
+
+function fig = createFigure3()
+fig = figure('Visible', 'off');
+surf(peaks);
 end
 
 function info = captureInfo(fig)
@@ -156,10 +184,6 @@ for i = 1:length(fields)
 end
 end
 
-function saveDifferences(differences)
-    save('figure_properties.mat', 'differences');
-end
-
 function blacklist = getBlacklist()
 blacklist = containers.Map();
 
@@ -168,6 +192,8 @@ blacklist('matlab.ui.Figure:Number') = [];
 blacklist('matlab.ui.Root:PointerLocation') = [];
 blacklist('matlab.ui.container.ContextMenu:ContextMenuOpeningFcn') = [];
 blacklist('matlab.graphics.axis.Axes:InteractionOptions') = [];
+blacklist('matlab.graphics.chart.primitive.Line:DataTipTemplate') = [];
+blacklist('matlab.graphics.chart.primitive.Surface:DataTipTemplate') = [];
 
 % Global properties to ignore for all objects
 blacklist('*:Children') = [];
