@@ -7,6 +7,9 @@ body { font-family: Arial, sans-serif; margin: 40px; }
 h1 { color: #333; }
 .summary { background-color: #f5f5f5; padding: 20px; border-radius: 5px; }
 .figure-list { margin-top: 20px; }
+.failure-count { font-weight: bold; }
+.failure-count.error { color: #cc0000; }
+.failure-count.success { color: #00cc00; }
 a { color: #0066cc; text-decoration: none; }
 a:hover { text-decoration: underline; }
 </style>
@@ -16,13 +19,13 @@ a:hover { text-decoration: underline; }
 <div class="summary">
 <h2>Summary</h2>
 <p>Total figures tested: 3</p>
-<p>Total differences found: 0</p>
+<p>Total differences found: <span class="failure-count success">0</span></p>
 </div>
 <div class="figure-list">
 <h2>Figures</h2>
-<p><a href="figure1.html">figure1</a></p>
-<p><a href="figure2.html">figure2</a></p>
-<p><a href="figure3.html">figure3</a></p>
+<p><a href="figure1.html">figure1</a> - <span class="failure-count success">0 failures</span></p>
+<p><a href="figure2.html">figure2</a> - <span class="failure-count success">0 failures</span></p>
+<p><a href="figure3.html">figure3</a> - <span class="failure-count success">0 failures</span></p>
 </div>
 </body>
 </html>

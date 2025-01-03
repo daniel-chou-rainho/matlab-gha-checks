@@ -1,72 +1,87 @@
 function generateHtmlReport()
    % Load the comparison results
    load(fullfile('output', 'all_figure_differences.mat'), 'allDifferences');
-   
+
    % Create output directory if it doesn't exist
    reportDir = fullfile('output', 'report');
    if ~exist(reportDir, 'dir')
        mkdir(reportDir);
    end
-   
+
    % Get field names (figure names) and calculate total failures
    figureNames = fieldnames(allDifferences);
    totalFailures = 0;
+   figureFailures = zeros(length(figureNames), 1);
+
    for i = 1:length(figureNames)
        differences = allDifferences.(figureNames{i}).differences;
-       totalFailures = totalFailures + sum([differences.matches] == false);
+       failures = sum([differences.matches] == false);
+       figureFailures(i) = failures;
+       totalFailures = totalFailures + failures;
    end
-   
+
    % Generate index page
-   generateIndexPage(figureNames, totalFailures, reportDir);
-   
+   generateIndexPage(figureNames, totalFailures, figureFailures, reportDir);
+
    % Generate individual figure pages
    for i = 1:length(figureNames)
        figureName = figureNames{i};
        figureData = allDifferences.(figureName);
        generateFigurePage(figureName, figureData, reportDir);
    end
-   
+
    % Copy all PNG files to report directory
    copyfile(fullfile('output', '*.png'), reportDir);
 end
 
-function generateIndexPage(figureNames, totalFailures, reportDir)
-   % Create the index.html file
-   fid = fopen(fullfile(reportDir, 'index.html'), 'w');
-   
-   % Write HTML header
-   fprintf(fid, '<!DOCTYPE html>\n');
-   fprintf(fid, '<html>\n<head>\n');
-   fprintf(fid, '<title>Figure Comparison Report</title>\n');
-   fprintf(fid, '<style>\n');
-   fprintf(fid, 'body { font-family: Arial, sans-serif; margin: 40px; }\n');
-   fprintf(fid, 'h1 { color: #333; }\n');
-   fprintf(fid, '.summary { background-color: #f5f5f5; padding: 20px; border-radius: 5px; }\n');
-   fprintf(fid, '.figure-list { margin-top: 20px; }\n');
-   fprintf(fid, 'a { color: #0066cc; text-decoration: none; }\n');
-   fprintf(fid, 'a:hover { text-decoration: underline; }\n');
-   fprintf(fid, '</style>\n');
-   fprintf(fid, '</head>\n<body>\n');
-   
-   % Write content
-   fprintf(fid, '<h1>Figure Comparison Report</h1>\n');
-   fprintf(fid, '<div class="summary">\n');
-   fprintf(fid, '<h2>Summary</h2>\n');
-   fprintf(fid, '<p>Total figures tested: %d</p>\n', length(figureNames));
-   fprintf(fid, '<p>Total differences found: %d</p>\n', totalFailures);
-   fprintf(fid, '</div>\n');
-   
-   % Write figure links
-   fprintf(fid, '<div class="figure-list">\n');
-   fprintf(fid, '<h2>Figures</h2>\n');
-   for i = 1:length(figureNames)
-       fprintf(fid, '<p><a href="%s.html">%s</a></p>\n', figureNames{i}, figureNames{i});
-   end
-   fprintf(fid, '</div>\n');
-   
-   % Close HTML
-   fprintf(fid, '</body>\n</html>');
-   fclose(fid);
+function generateIndexPage(figureNames, totalFailures, figureFailures, reportDir)
+    fid = fopen(fullfile(reportDir, 'index.html'), 'w');
+    
+    fprintf(fid, '<!DOCTYPE html>\n');
+    fprintf(fid, '<html>\n<head>\n');
+    fprintf(fid, '<title>Figure Comparison Report</title>\n');
+    fprintf(fid, '<style>\n');
+    fprintf(fid, 'body { font-family: Arial, sans-serif; margin: 40px; }\n');
+    fprintf(fid, 'h1 { color: #333; }\n');
+    fprintf(fid, '.summary { background-color: #f5f5f5; padding: 20px; border-radius: 5px; }\n');
+    fprintf(fid, '.figure-list { margin-top: 20px; }\n');
+    fprintf(fid, '.failure-count { font-weight: bold; }\n');
+    fprintf(fid, '.failure-count.error { color: #cc0000; }\n');
+    fprintf(fid, '.failure-count.success { color: #00cc00; }\n');
+    fprintf(fid, 'a { color: #0066cc; text-decoration: none; }\n');
+    fprintf(fid, 'a:hover { text-decoration: underline; }\n');
+    fprintf(fid, '</style>\n');
+    fprintf(fid, '</head>\n<body>\n');
+
+    fprintf(fid, '<h1>Figure Comparison Report</h1>\n');
+    fprintf(fid, '<div class="summary">\n');
+    fprintf(fid, '<h2>Summary</h2>\n');
+    fprintf(fid, '<p>Total figures tested: %d</p>\n', length(figureNames));
+    
+    if totalFailures == 0
+        statusClass = 'success';
+    else
+        statusClass = 'error';
+    end
+    fprintf(fid, '<p>Total differences found: <span class="failure-count %s">%d</span></p>\n', ...
+        statusClass, totalFailures);
+    fprintf(fid, '</div>\n');
+
+    fprintf(fid, '<div class="figure-list">\n');
+    fprintf(fid, '<h2>Figures</h2>\n');
+    for i = 1:length(figureNames)
+        if figureFailures(i) == 0
+            statusClass = 'success';
+        else
+            statusClass = 'error';
+        end
+        fprintf(fid, '<p><a href="%s.html">%s</a> - <span class="failure-count %s">%d failures</span></p>\n', ...
+            figureNames{i}, figureNames{i}, statusClass, figureFailures(i));
+    end
+    fprintf(fid, '</div>\n');
+
+    fprintf(fid, '</body>\n</html>');
+    fclose(fid);
 end
 
 function generateFigurePage(figureName, figureData, reportDir)
