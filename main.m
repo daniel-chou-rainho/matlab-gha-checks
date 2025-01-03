@@ -130,7 +130,9 @@ for i = 1:length(fields)
         val2 = strcmp(string(val2), 'on');
         matches = val1 == val2;
     elseif isnumeric(val1) && isnumeric(val2)
-        matches = all(abs(val1(:) - val2(:)) < 1e-10);
+        nan_matches = isnan(val1(:)) == isnan(val2(:));
+        num_matches = abs(val1(:) - val2(:)) < 1e-10;
+        matches = all(nan_matches & (num_matches | isnan(val1(:))));
     else
         matches = isequal(val1, val2);
     end
