@@ -1,58 +1,60 @@
 function main()
 if ~exist('output', 'dir')
-    mkdir('output');
+   mkdir('output');
 end
-% Create and capture multiple figures
-figs = {
-    createFigure1(),
-    createFigure2(),
-    createFigure3()
-    };
 
-% Save JPG files right after creation (JPG faster than PNG)
+baselinePaths = {
+   fullfile('output', 'baseline_figure1.mat'),
+   fullfile('output', 'baseline_figure2.mat'), 
+   fullfile('output', 'baseline_figure3.mat')
+};
+
+% If no baselines exist, create them and return
+if all(~isfile(baselinePaths))
+   createAndSaveBaselines(baselinePaths);
+   return;
+end
+
+% Create and capture test figures
+figs = {
+   createFigure1(),
+   createFigure2(),
+   createFigure3()
+};
+
+% Save test JPG files
 for i = 1:length(figs)
-    print(figs{i}, fullfile('output', sprintf('test_figure%d.jpg', i)), '-djpeg');
-    baselinePath = fullfile('output', sprintf('baseline_figure%d.jpg', i));
-    if ~isfile(baselinePath)
-        print(figs{i}, baselinePath, '-djpeg');
-    end
+   print(figs{i}, fullfile('output', sprintf('test_figure%d.jpg', i)), '-djpeg');
 end
 
 infos = cellfun(@captureInfo, figs, 'UniformOutput', false);
 
-baselinePaths = {
-    fullfile('output', 'baseline_figure1.mat'),
-    fullfile('output', 'baseline_figure2.mat'), 
-    fullfile('output', 'baseline_figure3.mat')
-};
-
-% Save baselines if they don't exist
-for i = 1:length(baselinePaths)
-    if ~isfile(baselinePaths{i})
-        info = infos{i};
-        save(baselinePaths{i}, 'info');
-    end
-end
-
-if all(~isfile(baselinePaths))
-    return;
-end
-
-% Compare figures and store image paths
+% Compare figures and store differences
 allDifferences = struct();
 for i = 1:length(baselinePaths)
-    baseline = load(baselinePaths{i});
-    diff = compareFigures(baseline.info, infos{i}, false);
-    
-    allDifferences.(sprintf('figure%d', i)) = struct(...
-        'differences', diff, ...
-        'baseline_image', sprintf('baseline_figure%d.png', i), ...
-        'test_image', sprintf('test_figure%d.png', i));
+   baseline = load(baselinePaths{i});
+   diff = compareFigures(baseline.info, infos{i}, true);
+   
+   allDifferences.(sprintf('figure%d', i)) = struct(...
+       'differences', diff, ...
+       'baseline_image', sprintf('baseline_figure%d.jpg', i), ...
+       'test_image', sprintf('test_figure%d.jpg', i));
 end
 
 save(fullfile('output', 'all_figure_differences.mat'), 'allDifferences');
 generateHtmlReport();
 web(fullfile('output', 'report', 'index.html'));
+end
+
+function createAndSaveBaselines(baselinePaths)
+   figs = {createFigure1(), createFigure2(), createFigure3()};
+   infos = cellfun(@captureInfo, figs, 'UniformOutput', false);
+   
+   for i = 1:length(baselinePaths)
+       info = infos{i};
+       save(baselinePaths{i}, 'info');
+       print(figs{i}, fullfile('output', sprintf('baseline_figure%d.jpg', i)), '-djpeg');
+   end
 end
 
 % Example figure creation functions
