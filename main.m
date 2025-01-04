@@ -51,6 +51,8 @@ for i = 1:length(baselinePaths)
 end
 
 save(fullfile('output', 'all_figure_differences.mat'), 'allDifferences');
+generateHtmlReport();
+web(fullfile('output', 'report', 'index.html'));
 end
 
 % Example figure creation functions
