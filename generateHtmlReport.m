@@ -30,8 +30,8 @@ function generateHtmlReport()
        generateFigurePage(figureName, figureData, reportDir);
    end
 
-   % Copy all PNG files to report directory
-   copyfile(fullfile('output', '*.png'), reportDir);
+   % Copy all jpg files to report directory
+   copyfile(fullfile('output', '*.jpg'), reportDir);
 end
 
 function generateIndexPage(figureNames, totalFailures, figureFailures, reportDir)

@@ -9,12 +9,12 @@ figs = {
     createFigure3()
     };
 
-% Save PNG files right after creation
+% Save JPG files right after creation (JPG faster than PNG)
 for i = 1:length(figs)
-    saveas(figs{i}, fullfile('output', sprintf('test_figure%d.png', i)));
-baselinePath = fullfile('output', sprintf('baseline_figure%d.png', i));
+    print(figs{i}, fullfile('output', sprintf('test_figure%d.jpg', i)), '-djpeg');
+    baselinePath = fullfile('output', sprintf('baseline_figure%d.jpg', i));
     if ~isfile(baselinePath)
-        saveas(figs{i}, baselinePath);
+        print(figs{i}, baselinePath, '-djpeg');
     end
 end
 
