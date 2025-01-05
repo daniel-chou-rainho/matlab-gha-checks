@@ -29,6 +29,8 @@ function str = convertToString(val)
         str = string(val);
     elseif ischar(val) || isstring(val)
         str = char(val);
+    elseif iscell(val)
+        str = strjoin(val, ', ');
     else
         str = '<complex value>';
     end
