@@ -1,24 +1,22 @@
 function generateMarkdownReport(differencesPath)
     data = load(differencesPath);
     differences = data.allDifferences.differences;
-    
-    style = '<style>table{width:100%;table-layout:fixed;word-wrap:break-word;}</style>\n';
-    header = '| Class | Parent | Field | Baseline | Test | Matches |';
-    separator = '|-------|--------|--------|-----------|------|---------|';
-    rows = strings(length(differences), 1);
-    
+   
+    html = ['<table style="width:100%;table-layout:fixed;word-wrap:break-word;">\n', ...
+            '<tr><th>Class</th><th>Parent</th><th>Field</th><th>Baseline</th><th>Test</th><th>Matches</th></tr>\n'];
+            
     for i = 1:length(differences)
         diff = differences(i);
-        rows(i) = sprintf('| %s | %s | %s | %s | %s | %s |', ...
+        html = [html, sprintf('<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n', ...
             diff.class, diff.parent, diff.field, ...
             convertToString(diff.baseline), convertToString(diff.test), ...
-            string(diff.matches));
+            string(diff.matches))];
     end
     
-    fullText = strjoin([style; header; separator; rows], newline);
+    html = [html, '</table>'];
     
-    fid = fopen('output/differences.md', 'w');
-    fprintf(fid, '%s', fullText);
+    fid = fopen('output/differences.html', 'w');
+    fprintf(fid, '%s', html);
     fclose(fid);
 end
 
