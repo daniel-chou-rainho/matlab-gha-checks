@@ -2,23 +2,23 @@ function generateMarkdownReport(differencesPath)
     data = load(differencesPath);
     differences = data.allDifferences.differences;
     
-    header = string('| Class | Parent | Field | Baseline | Test | Matches |');
-    separator = string('|-------|--------|--------|-----------|------|---------|');
+    style = '<style>table{width:100%;table-layout:fixed;word-wrap:break-word;}</style>\n';
+    header = '| Class | Parent | Field | Baseline | Test | Matches |';
+    separator = '|-------|--------|--------|-----------|------|---------|';
     rows = strings(length(differences), 1);
     
     for i = 1:length(differences)
         diff = differences(i);
-        baseline = convertToString(diff.baseline);
-        test = convertToString(diff.test);
         rows(i) = sprintf('| %s | %s | %s | %s | %s | %s |', ...
             diff.class, diff.parent, diff.field, ...
-            baseline, test, string(diff.matches));
+            convertToString(diff.baseline), convertToString(diff.test), ...
+            string(diff.matches));
     end
     
-    fullText = strjoin([header; separator; rows], newline);
+    fullText = strjoin([style; header; separator; rows], newline);
     
     fid = fopen('output/differences.md', 'w');
-    fprintf(fid, '%s', char(fullText));
+    fprintf(fid, '%s', fullText);
     fclose(fid);
 end
 
