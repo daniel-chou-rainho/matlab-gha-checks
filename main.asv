@@ -204,16 +204,16 @@ function differences = compareProperties(differences, obj1, obj2, parent, debug)
 end
 
 function blacklist = getBlacklist()
-    blacklist = containers.Map();
-    
-    % Object-specific properties
-    blacklist('matlab.ui.Figure:Number') = [];
-    blacklist('matlab.ui.Root:PointerLocation') = [];
-    blacklist('matlab.ui.container.ContextMenu:ContextMenuOpeningFcn') = [];
-    blacklist('matlab.graphics.axis.Axes:InteractionOptions') = [];
-    blacklist('matlab.graphics.chart.primitive.Line:DataTipTemplate') = [];
-    blacklist('matlab.graphics.chart.primitive.Surface:DataTipTemplate') = [];
-    
-    % Global properties to ignore for all objects
-    blacklist('*:Children') = [];
+blacklist = containers.Map();
+
+% Object-specific properties
+blacklist('matlab.ui.Figure:Number') = [];
+blacklist('matlab.ui.Root:PointerLocation') = [];
+blacklist('matlab.ui.container.ContextMenu:ContextMenuOpeningFcn') = [];
+blacklist('matlab.graphics.axis.Axes:InteractionOptions') = [];
+blacklist('matlab.graphics.chart.primitive.Line:DataTipTemplate') = [];
+blacklist('matlab.graphics.chart.primitive.Surface:DataTipTemplate') = [];
+
+% Global properties to ignore for all objects
+blacklist('*:Children') = [];
 end
