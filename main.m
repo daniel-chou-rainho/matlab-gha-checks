@@ -33,7 +33,7 @@ function main()
     allDifferences = struct();
     for i = 1:length(baselinePaths)
        baseline = load(baselinePaths{i});
-       diff = compareFigures(baseline.info, infos{i}, true);
+       diff = compareFigures(baseline.info, infos{i}, false);
        
        allDifferences.(sprintf('figure%d', i)) = struct(...
            'differences', diff, ...
@@ -208,6 +208,7 @@ function blacklist = getBlacklist()
     
     % Object-specific properties
     blacklist('matlab.ui.Figure:Number') = [];
+    blacklist('matlab.ui.Figure:OuterPosition') = [];
     blacklist('matlab.ui.Root:PointerLocation') = [];
     blacklist('matlab.ui.container.ContextMenu:ContextMenuOpeningFcn') = [];
     blacklist('matlab.graphics.axis.Axes:InteractionOptions') = [];
