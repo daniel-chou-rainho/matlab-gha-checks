@@ -18,7 +18,8 @@ jobs:
       uses: matlab-actions/run-command@v1
       with:
         command: addpath(pwd); main
-    - name: Add report to summary
-      if: success()
-      run: |
-        cat output/report/index.html >> $GITHUB_STEP_SUMMARY
+    - name: Upload output folder
+      uses: actions/upload-artifact@v4
+      with:
+        name: output
+        path: output/
