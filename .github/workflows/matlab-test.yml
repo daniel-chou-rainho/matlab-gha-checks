@@ -1,25 +1,27 @@
 name: MATLAB Test
 on:
-  push:
-  workflow_dispatch:
+ push:
+ workflow_dispatch:
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up virtual display
-      run: |
-        sudo apt-get install -y xvfb
-        Xvfb :99 -screen 0 2560x1440x24 -dpi 96 &
-        echo "DISPLAY=:99" >> $GITHUB_ENV
-    - name: Install MATLAB
-      uses: matlab-actions/setup-matlab@v2
-    - name: Run script
-      uses: matlab-actions/run-command@v1
-      with:
-        command: addpath(pwd); main
-    - name: Upload output folder
-      uses: actions/upload-artifact@v4
-      with:
-        name: output
-        path: output/
+ test:
+   runs-on: ubuntu-latest
+   steps:
+   - uses: actions/checkout@v4
+   - name: Set up virtual display
+     run: |
+       sudo apt-get install -y xvfb
+       Xvfb :99 -screen 0 2560x1440x24 -dpi 96 &
+       echo "DISPLAY=:99" >> $GITHUB_ENV
+   - name: Install MATLAB
+     uses: matlab-actions/setup-matlab@v2
+   - name: Run script
+     uses: matlab-actions/run-command@v1
+     with:
+       command: addpath(pwd); main
+   - name: Generate summary
+     run: cat output/differences.md >> $GITHUB_STEP_SUMMARY
+   - name: Upload output folder
+     uses: actions/upload-artifact@v4
+     with:
+       name: output
+       path: output/
