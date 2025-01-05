@@ -18,7 +18,7 @@ function main()
     
     % Compare figures and store differences
     baseline = load(baselinePath);
-    differences = compareFigures(baseline.info, info, true);
+    differences = compareFigures(baseline.info, info, false);
     
     allDifferences = struct(...
         'differences', differences, ...
@@ -41,7 +41,8 @@ function fig = createFigure()
     [X,Y] = meshgrid(-2:.2:2);
     Z = X.*exp(-X.^2-Y.^2);
     surf(X,Y,Z)
-    colorbar
+    c = colorbar;
+    c.Label.String = 'Z Value';
 end
 
 function info = captureInfo(fig)
