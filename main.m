@@ -26,7 +26,7 @@ function main()
         'test_image', 'test_figure.jpg');
     
     save(fullfile('output', 'figure_differences.mat'), 'allDifferences');
-    generateMarkdownReport(fullfile('output', 'figure_differences.mat'));
+    generateHtmlReport(fullfile('output', 'figure_differences.mat'));
 end
 
 function createAndSaveBaseline(baselinePath)
