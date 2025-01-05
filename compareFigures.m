@@ -1,28 +1,30 @@
 function differences = compareFigures(info1, info2, debug)
     differences = struct('class', {}, 'parent', {}, 'field', {}, 'baseline', {}, 'test', {}, 'matches', {});
-    
+   
+    % Check counts and list objects
     if length(info1) ~= length(info2)
-        warning('Object count mismatch')
-        disp('Baseline:')
-        disp(info1)
-        disp('Test:')
-        disp(info2)
-        differences(1).field = 'early_return_occurred';
+        differences(1).class = 'root';
+        differences(1).parent = '';
+        differences(1).field = 'object_count';
+        differences(1).baseline = {info1.class};
+        differences(1).test = {info2.class};
+        differences(1).matches = false;
         return;
     end
-
-    for i = 1:length(info1)
-        if ~strcmp(info1(i).class, info2(i).class)
-            warning('Class mismatch')
-            disp('Baseline:')
-            disp(info1)
-            disp('Test:')
-            disp(info2)
-            differences(1).field = 'early_return_occurred';
-            return;
-        end
-    end
     
+    % Check all classes
+    allClasses1 = {info1.class};
+    allClasses2 = {info2.class}; 
+    if ~isequal(allClasses1, allClasses2)
+        differences(1).class = 'root';
+        differences(1).parent = '';
+        differences(1).field = 'class_mismatch';
+        differences(1).baseline = allClasses1;
+        differences(1).test = allClasses2;
+        differences(1).matches = false;
+        return;
+    end
+   
     % Finally do property comparisons
     for i = 1:length(info1)
         differences = compareProperties(differences, info1(i), info2(i), info1(i).parent, debug);
