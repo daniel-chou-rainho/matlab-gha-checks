@@ -18,7 +18,7 @@ function main()
     
     % Compare figures and store differences
     baseline = load(baselinePath);
-    differences = compareFigures(baseline.info, info, false);
+    differences = compareFigures(baseline.info, info, true);
     
     allDifferences = struct(...
         'differences', differences, ...
