@@ -157,22 +157,20 @@ function generateFigurePage(figureName, figureData, reportDir)
 end
 
 function str = convertToString(val)
-   % Helper function to convert various data types to string representation
-   if isnumeric(val)
-       if isscalar(val)
-           str = num2str(val);
-       else
-           str = ['[' num2str(size(val)) ' array]'];
-       end
-   elseif islogical(val)
-       if val
-           str = 'true';
-       else
-           str = 'false';
-       end
-   elseif ischar(val) || isstring(val)
-       str = char(val);
-   else
-       str = class(val);
-   end
+if isnumeric(val)
+    if isscalar(val)
+        str = num2str(val);
+    else
+        % Create collapsible element with array size preview
+        arrayStr = ['[' regexprep(num2str(val(:)'), '\s+', ', ') ']'];
+        str = sprintf('<details><summary>[%s array]</summary>%s</details>', ...
+            num2str(size(val)), arrayStr);
+    end
+elseif islogical(val)
+    str = string(val);
+elseif ischar(val) || isstring(val)
+    str = char(val);
+else
+    str = class(val);
+end
 end
