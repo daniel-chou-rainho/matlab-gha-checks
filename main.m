@@ -45,7 +45,7 @@ function fig = createFigure()
 end
 
 function info = captureInfo(fig)
-    objs = findall(fig, '-not', 'Type', 'uimenu');
+    objs = findall(fig, '-not', 'Type', 'uimenu', '-not', 'Type', 'uipushtool', '-not', 'Type', 'uitoggletool', '-not', 'Type', 'annotationpane', '-not', 'Type', 'uitoolbar');
     
     info = struct();
     for i = 1:length(objs)
