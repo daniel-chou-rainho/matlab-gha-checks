@@ -4,11 +4,14 @@ Z = X.*exp(-X.^2 - Y.^2);
 
 % Create surface plot
 figure
+f = gcf;
+ax = axes;
 surf(X,Y,Z)
-colorbar
-title('Surface Plot')
+c = colorbar;
+c.Label.String = 'Z Value';
 
-% Get all graphics objects
-allObjs = findall(gcf);
+xlabel('X axis');
+ylabel('Y axis'); 
+title('Surface Plot');
 
-x = struct(gcf)
+colorbarLabels = findall(groot, 'Type', 'text', 'Parent', c)
