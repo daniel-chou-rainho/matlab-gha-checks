@@ -7,11 +7,11 @@ jobs:
    runs-on: ubuntu-latest
    steps:
    - uses: actions/checkout@v4
-   - name: Set up virtual display
-     run: |
-       sudo apt-get install -y xvfb
-       Xvfb :99 -screen 0 2560x1440x24 -dpi 96 &
-       echo "DISPLAY=:99" >> $GITHUB_ENV
+  #  - name: Set up virtual display
+  #    run: |
+  #      sudo apt-get install -y xvfb
+  #      Xvfb :99 -screen 0 2560x1440x24 -dpi 96 &
+  #      echo "DISPLAY=:99" >> $GITHUB_ENV
    - name: Install MATLAB
      uses: matlab-actions/setup-matlab@v2
    - name: Run script
