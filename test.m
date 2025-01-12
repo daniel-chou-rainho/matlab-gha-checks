@@ -1,17 +1,6 @@
-% Create sample data
-[X,Y] = meshgrid(-2:0.2:2);
-Z = X.*exp(-X.^2 - Y.^2);
+current_dpi = get(0, 'ScreenPixelsPerInch');
+disp(['Current DPI: ', num2str(current_dpi)]);
 
-% Create surface plot
-figure
-f = gcf;
-ax = axes;
-surf(X,Y,Z)
-c = colorbar;
-c.Label.String = 'Z Value';
-
-xlabel('X axis');
-ylabel('Y axis'); 
-title('Surface Plot');
-
-colorbarLabels = findall(groot, 'Type', 'text', 'Parent', c)
+set(0, 'ScreenPixelsPerInch', 150);
+new_dpi = get(0, 'ScreenPixelsPerInch');
+disp(['New DPI: ', num2str(new_dpi)]);
