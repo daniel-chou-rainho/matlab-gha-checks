@@ -12,6 +12,8 @@ jobs:
   #      sudo apt-get install -y xvfb
   #      Xvfb :99 -screen 0 2560x1440x24 -dpi 96 &
   #      echo "DISPLAY=:99" >> $GITHUB_ENV
+   - name: Set DPI via Java property
+     run: echo "java.awt.screensize=96" >> $GITHUB_ENV
    - name: Install MATLAB
      uses: matlab-actions/setup-matlab@v2
    - name: Run script
