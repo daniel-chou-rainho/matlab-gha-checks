@@ -1,0 +1,24 @@
+name: MATLAB SVG Test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: MATLAB Setup
+      uses: matlab-actions/setup-matlab@v2
+      
+    - name: Run Script
+      uses: matlab-actions/run-command@v2
+      with:
+        command: test
+        
+    - name: Upload SVG
+      uses: actions/upload-artifact@v4
+      with:
+        name: plot
+        path: figure.svg
